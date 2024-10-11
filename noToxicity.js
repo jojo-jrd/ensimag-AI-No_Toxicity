@@ -1,4 +1,14 @@
-/*
-Just draw a border round the document.body.
-*/
-document.body.style.border = "5px solid red";
+(function() {
+
+    // Récupère tous les blocs de la page
+    const textBlocks = document.querySelectorAll('body *');
+
+    debugger
+    textBlocks.forEach(block => {
+        // Si le bloc possède du texte
+        if (block.innerText) {
+            // TODO here
+            block.style.color = '#ffaa00';
+        }
+    });
+})();
