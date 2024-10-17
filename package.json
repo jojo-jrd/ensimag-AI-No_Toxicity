@@ -1,0 +1,11 @@
+{
+  "name": "no-toxicity-extension",
+  "version": "1.0.0",
+  "description": "Remove all toxic texts",
+  "scripts": {
+    "build-chrome": "cp manifest.chrome.json manifest.json",
+    "build-firefox": "cp manifest.firefox.json manifest.json",
+    "clean": "rm manifest.json"
+  },
+  "devDependencies": {}
+}

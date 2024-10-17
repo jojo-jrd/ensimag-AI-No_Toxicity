@@ -1,6 +1,6 @@
 {
   "description": "Remove all toxic texts",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "No toxicity",
   "version": "1.0",
   "content_scripts": [
@@ -19,14 +19,12 @@
     }
   ],
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "service_worker": "background.js"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
-      "48": "icons/icon-48.png",
-      "96": "icons/icon-96.png"
+      "48": "icons/icon.png",
+      "96": "icons/icon.png"
     },
     "default_title": "Analyze Text Blocks",
     "default_popup": "popup/popup.html"
@@ -42,11 +40,9 @@
     "storage",
     "tabs",
     "activeTab",
-    "<all_urls>"
+    "scripting"
   ],
-  "applications": {
-    "gecko": {
-      "id": "jordan.josserand@grenoble-inp.org"
-    }
-  }
+  "host_permissions": [
+    "<all_urls>"
+  ]
 }
