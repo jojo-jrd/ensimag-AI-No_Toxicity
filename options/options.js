@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       
       const keywords = document.getElementById('keywords').value;
-      
-      // Sauvegarder les mots-clés dans le stockage
-      browserAPI.storage.sync.set({ keywords: keywords }, () => {
+      const autoMode = document.getElementById('auto-dangerous-words').checked;
+
+      // Sauvegarder les mots-clés et de l'auto gestion dans le stockage
+      browserAPI.storage.sync.set({ keywords, autoMode }, () => {
         alert('Mots-clés enregistrés avec succès !');
       });
     });

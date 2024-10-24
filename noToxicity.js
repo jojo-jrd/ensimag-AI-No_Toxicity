@@ -1,6 +1,10 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 (function() {
+    browserAPI.storage.sync.get('autoMode', (autoMode) => {
+        // TODO
+        console.log("AUTOMODE : ", autoMode)
+    });
     browserAPI.storage.sync.get('keywords', (keywordsWarnings) => {
         console.log(keywordsWarnings); // TODO
         // Récupère tous les blocs de la page
