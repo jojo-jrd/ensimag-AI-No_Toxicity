@@ -1,12 +1,11 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 (function() {
-    browserAPI.storage.sync.get('autoMode', (autoMode) => {
+    browserAPI.storage.sync.get(['keywords', 'autoMode'], (optionsStorage) => {
+        const keywords = optionsStorage.keywords || "";
+        const autoMode = optionsStorage.autoMode;
         // TODO
-        console.log("AUTOMODE : ", autoMode)
-    });
-    browserAPI.storage.sync.get('keywords', (keywordsWarnings) => {
-        console.log(keywordsWarnings); // TODO
+        
         // Récupère tous les blocs de la page
         // TODO h3 problème
         const textBlocks = document.querySelectorAll('h1,h2,h4,h5,h6,pre,p,span,a');

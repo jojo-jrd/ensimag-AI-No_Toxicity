@@ -1,19 +1,24 @@
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 document.addEventListener('DOMContentLoaded', () => {
-    browserAPI.storage.sync.get('keywords', (data) => {
-      document.getElementById('keywords').value = data.keywords || '';
-    });
-  
-    document.getElementById('options-form').addEventListener('submit', (event) => {
-      event.preventDefault();
-      
-      const keywords = document.getElementById('keywords').value;
-      const autoMode = document.getElementById('auto-dangerous-words').checked;
+  const keywordsElem = document.getElementById('keywords');
+  const autoModeElem = document.getElementById('auto-dangerous-words');
 
-      // Sauvegarder les mots-clés et de l'auto gestion dans le stockage
-      browserAPI.storage.sync.set({ keywords, autoMode }, () => {
-        alert('Mots-clés enregistrés avec succès !');
-      });
+  // Set the values from the storage
+  browserAPI.storage.sync.get(['keywords', 'autoMode'], (data) => {
+    keywordsElem.value = data.keywords || '';
+    autoModeElem.checked = data.autoMode || false;
+  });
+
+  document.getElementById('options-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const keywords = keywordsElem.value;
+    const autoMode = autoModeElem.checked;
+
+    // Save the values into the storage
+    browserAPI.storage.sync.set({ keywords, autoMode }, () => {
+      alert('Mots-clés enregistrés avec succès !');
     });
   });
+});
