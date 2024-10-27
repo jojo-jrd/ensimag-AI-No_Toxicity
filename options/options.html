@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="options.css">
+  <title>Options</title>
+</head>
+<body>
+  <h1>No Toxicity Extension</h1>
+  <form id="options-form">
+    <label for="keywords">Mots-clés à analyser (séparés par des virgules) :</label><br>
+    <input type="text" id="keywords" name="keywords"><br><br>
+
+    <div class="block-checkbox">
+      <label for="auto-dangerous-words">Gestion automatique des blocks dangereux :</label>
+      <input type="checkbox" id="auto-dangerous-words" name="auto-dangerous-words">
+    </div><br><br>
+    <button type="submit">Enregistrer</button>
+  </form>
+
+  <script src="options.js"></script>
+</body>
+</html>
