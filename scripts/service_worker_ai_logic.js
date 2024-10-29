@@ -1,7 +1,10 @@
+// Déclare window globalement (sinon problème dans les bundles)
+globalThis.window = globalThis.window || globalThis;
+
 import * as tf from '@tensorflow/tfjs';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 
-const browserAPI = typeof browser !== "undefined" ? browser : chrome;
+const browserAPI_serviceworker = typeof browser !== "undefined" ? browser : chrome;
 let model;
 let modelLoadingPromise = null;
 const embeddingCache = new Map(); // Cache pour les embedding
@@ -65,12 +68,13 @@ function cosineSimilarity(vecA, vecB) {
 
 async function analyzeText(sentence, keywords, threshold = 0.7) {
     try {
+        console.log("Analysing uwu")
         // Obtenir les embeddings pour tous les mots en une seule fois
         //const texts = [sentence, ...keywords];
         const embeddingsA = await getEmbeddings([sentence]);
         const embeddingsB = await getEmbeddings(keywords);
 
-
+        console.log("OKi embedding")
         // Séparer l'embedding de la phrase et des mots-clés
         const sentenceEmbedding = embeddingsA[0];
         const keywordEmbeddings = embeddingsB;
@@ -90,7 +94,7 @@ async function analyzeText(sentence, keywords, threshold = 0.7) {
         }
         return false; // Retourne false si aucun mot ne dépasse le seuil
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return false;
     }
 }
@@ -100,6 +104,8 @@ loadModel(); // On charge le modèle dès le début
 
 function handleMessage(message, sender, sendResponse) {
     if (message.type === 'analyzeText' && message.sentence && Array.isArray(message.keywords)) {
+        console.log("Handle MEssageeeeeeeeeeeeeeeeeeeeeeeee!!! => "+message.sentence)
+        
         analyzeText(message.sentence, message.keywords, message.threshold)
             .then(result => {
                 sendResponse({ isAboveThreshold: result });
@@ -111,4 +117,4 @@ function handleMessage(message, sender, sendResponse) {
         return true; // Indique une réponse asynchrone à l’API
     }
 }
-browserAPI.runtime.onMessage.addListener(handleMessage);
+browserAPI_serviceworker.runtime.onMessage.addListener(handleMessage);
