@@ -1,9 +1,10 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  entry: './scripts/background_ai_logic.js',  
+  entry: './scripts/service_worker_ai_logic.js',  
   output: {
-    filename: 'background_ai_logic.bundle.js',
+    filename: 'service_worker_ai_logic.bundle.js',
     path: path.resolve(__dirname, 'scripts')  // Le dossier de sortie pour les fichiers Webpack
   },
   mode: 'production'
