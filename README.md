@@ -1,50 +1,33 @@
-# Extension de navigateur - IA
+# No Toxicity Extension
 
-<img align="right" width="100" height="100" src="./icons/ensimag.svg">
+## Prérequis
 
-
-## Objectif
-
-L'objectif était de créer une extension utilisant l'Intelligence Artificielle permettant de cacher des blocs qui contenaient des mots toxiques (vulgaires, violents, suicidaires et discriminants)
+Assurez-vous d'avoir `npm` installé sur votre machine.
 
 ## Installation
 
-Nous pouvons l'utiliser et l'installer en mode "Debug" car il est assez complexe de la faire valider et la mettre en extension dans les addons des navigateurs.
+1. **Installer les dépendances :**
 
-Cet extension est multi-plateforme, elle est donc compatible entre `Firefox` et les naviagateurs sous `Chromium`.
-Cependant, l'installation diverge en fonction de son navigateur d'utilisation.
+   ```sh
+   npm install
+   ```
 
-### Firefox
-
-Tout d'abord, dans ce répertoire, il faut exécuter la commande :
-
-```sh
-npm run build-firefox
-```
-
-Ensuite, rendez-vous sur le site [about:debugging](about:debugging) de Firefox, cliquez sur l'onglet `This Firefox`/`Ce Firefox` puis sur `Load Tempory Add-on...`/`Charger un module complémentaire temporaire...` et ouvrez le fichier `manifest.json` de l'extension.
-
-### Chrome
-
-Tout d'abord, dans ce répertoire, il faut exécuter la commande :
-
-```sh
-npm run build-chrome
-```
-
-Ensuite, rendez-vous sur le site [chrome://extensions/](chrome://extensions/) de Chrome, cliquez sur le bouton `Load unpacked` et ouvrez le dossier comportant le fichier `manifest.json` de l'extension.
+2. **Build la solution :**
+    ###  Chrome:
+        npm run build:chrome
+        
+    ### Firefox:
+        npm run build:firefox
 
 ## Utilisation
+Après avoir généré la solution, vous pouvez charger l'extension dans votre navigateur en mode développeur et commencer à l'utiliser pour analyser les textes toxiques.
 
-TODO options etc...
+### Chrome:
+1. Ouvrez chrome://extensions/ dans votre navigateur Chrome.
+2. Activez le mode développeur en haut à droite.
+3. Cliquez sur "Charger l'extension non empaquetée" et sélectionnez le dossier contenant votre extension.
 
+### Firefox:
 
-## Crédit
-
-Ce projet a été réalisé dans un groupe de 4 personnes :
-- LENNE Arthur
-- JOSSERAND Jordan
-- SOUBEYRAND Alex
-- GOMEZ Julian
-
-
+1. Ouvrez about:debugging#/runtime/this-firefox dans votre navigateur Firefox.
+2. Cliquez sur "Charger Add-on Temporaire" et sélectionnez le dossier contenant votre extension.

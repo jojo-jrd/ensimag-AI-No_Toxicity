@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const autoModeElem = document.getElementById('auto-dangerous-words');
 
   // Set the values from the storage
-  browserAPI.storage.sync.get(['keywords', 'autoMode'], (data) => {
+  browserAPI.storage.local.get(['keywords', 'autoMode'], (data) => {
     keywordsElem.value = data.keywords || '';
     autoModeElem.checked = data.autoMode || false;
   });
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoMode = autoModeElem.checked;
 
     // Save the values into the storage
-    browserAPI.storage.sync.set({ keywords, autoMode }, () => {
+    browserAPI.storage.local.set({ keywords, autoMode }, () => {
       alert('Mots-clés enregistrés avec succès !');
     });
   });
