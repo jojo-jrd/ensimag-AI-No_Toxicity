@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
   browserAPI.storage.local.get(['keywords', 'autoMode'], (data) => {
     keywordsElem.value = data.keywords || '';
     autoModeElem.checked = data.autoMode || false;
-    console.log(data);
-    console.log("uwu");
   });
 
   document.getElementById('options-form').addEventListener('submit', (event) => {
@@ -18,16 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const keywords = keywordsElem.value;
     const autoMode = autoModeElem.checked;
 
-    console.log('Valeurs à sauvegarder:', { keywords, autoMode });
-
     // Save the values into the storage
     browserAPI.storage.local.set({ keywords, autoMode }, () => {
       alert('Mots-clés enregistrés avec succès !');
-
-        browserAPI.storage.local.get(['keywords', 'autoMode', 'kitten'], (data) => {
-          console.log(data);
-          console.log("uwu?");
-        });
     });
   });
 });
