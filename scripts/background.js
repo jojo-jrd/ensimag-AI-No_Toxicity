@@ -1,6 +1,9 @@
 
 
-importScripts('service_worker_ai_logic.bundle.js');
+if (typeof chrome !== "undefined") {
+    importScripts('service_worker_ai_logic.bundle.js');
+}
+
 
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
