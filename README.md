@@ -30,5 +30,4 @@ Après avoir généré la solution, vous pouvez charger l'extension dans votre n
 ### Firefox:
 
 1. Ouvrez about:debugging#/runtime/this-firefox dans votre navigateur Firefox.
-2. Activez le mode développeur en haut à droite.
-3. Cliquez sur "Charger l'extension non empaquetée" et sélectionnez le dossier contenant votre extension.
+2. Cliquez sur "Charger Add-on Temporaire" et sélectionnez le dossier contenant votre extension.

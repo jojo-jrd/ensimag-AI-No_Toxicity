@@ -19,7 +19,7 @@
     }
   ],
   "background": {
-    "scripts": ["scripts/background.js", "scripts/background_ai_logic.bundle.js"]
+    "scripts": ["scripts/background.js", "scripts/service_worker_ai_logic.bundle.js"]
   },
   "action": {
     "default_icon": {

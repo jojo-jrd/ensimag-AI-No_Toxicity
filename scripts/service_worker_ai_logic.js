@@ -1,5 +1,7 @@
-// Déclare window globalement (sinon problème dans les bundles)
-globalThis.window = globalThis.window || globalThis;
+// Déclare window globalement sur chrome (sinon problème dans les bundles)
+if (typeof browser === "undefined") {
+    globalThis.window = globalThis.window || globalThis;
+}
 
 import * as tf from '@tensorflow/tfjs';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
