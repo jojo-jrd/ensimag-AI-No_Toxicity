@@ -34,7 +34,7 @@ async function sendAnalyzeTextRequest(sentence, keywords) {
     }
 
     // Sélectionne des éléments parents logiques pour regrouper le texte
-    const textBlocks = document.querySelectorAll('h1,h2,h4,h5,h6,pre,p,span,a');
+    const textBlocks = document.querySelectorAll('h1,h2,h3,h4,h5,h6,pre,p,span,a,strong,li');
 
     // Utiliser un Set pour éviter de traiter plusieurs fois le même élément
     const processedElements = new Set();
