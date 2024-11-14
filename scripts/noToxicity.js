@@ -84,7 +84,8 @@ async function sendAnalyzeTextRequest(sentence, keywords) {
                 explanation.innerText = "Texte masqué en raison de son contenu potentiellement inapproprié.";
 
                 // Ajouter un événement au bouton pour révéler le texte
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (ev) => {
+                    ev.preventDefault();
                     container.classList.add('visible-no-toxicity');
                     overlay.style.display = 'none'; // Cache la superposition après le clic
                 });

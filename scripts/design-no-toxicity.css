@@ -44,6 +44,7 @@
 /* Style pour le bouton révéler */
 .reveal-button-no-toxicity {
   background-color: #6200ea; /* Couleur moderne (violet) */
+  z-index: 150;
   color: white;
   border: none;
   padding: 10px 20px;
