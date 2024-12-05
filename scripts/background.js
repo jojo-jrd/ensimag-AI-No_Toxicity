@@ -1,7 +1,6 @@
 
 
 if (typeof browser === "undefined") {
-    console.log("bruhhhh",chrome)
     importScripts('service_worker_ai_logic.bundle.js');
 }
 

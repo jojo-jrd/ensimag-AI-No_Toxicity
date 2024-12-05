@@ -17,7 +17,6 @@ async function loadModel() {
             modelLoadingPromise = use.load().then(loadedModel => {
                 model = loadedModel;
                 modelLoadingPromise = null;
-                console.log("Modèle chargé !");
 
                 return model;
             }).catch(error => {
@@ -70,25 +69,19 @@ function cosineSimilarity(vecA, vecB) {
 
 async function analyzeText(sentence, keywords, threshold = 0.7) {
     try {
-        console.log("Analysing uwu")
         // Obtenir les embeddings pour tous les mots en une seule fois
         //const texts = [sentence, ...keywords];
         const embeddingsA = await getEmbeddings([sentence]);
         const embeddingsB = await getEmbeddings(keywords);
 
-        console.log("OKi embedding")
         // Séparer l'embedding de la phrase et des mots-clés
         const sentenceEmbedding = embeddingsA[0];
         const keywordEmbeddings = embeddingsB;
-
-        console.log("wordEmbeddings", sentence, sentenceEmbedding);
-        console.log("keywordEmbeddings", keywords, keywordEmbeddings);
         
         let keywordCpt = 0;
         for (const keywordEmbedding of keywordEmbeddings) {
 
             const similarity = cosineSimilarity(sentenceEmbedding, keywordEmbedding);
-            console.log("Similarité avec", keywords[keywordCpt], sentence, ":", similarity);
             if (similarity > threshold) {
                 return true; // Retourne true dès qu'un mot dépasse le seuil
             }
@@ -96,7 +89,7 @@ async function analyzeText(sentence, keywords, threshold = 0.7) {
         }
         return false; // Retourne false si aucun mot ne dépasse le seuil
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return false;
     }
 }
@@ -105,9 +98,7 @@ async function analyzeText(sentence, keywords, threshold = 0.7) {
 loadModel(); // On charge le modèle dès le début
 
 function handleMessage(message, sender, sendResponse) {
-    if (message.type === 'analyzeText' && message.sentence && Array.isArray(message.keywords)) {
-        console.log("Handle MEssageeeeeeeeeeeeeeeeeeeeeeeee!!! => "+message.sentence)
-        
+    if (message.type === 'analyzeText' && message.sentence && Array.isArray(message.keywords)) {        
         analyzeText(message.sentence, message.keywords, message.threshold)
             .then(result => {
                 sendResponse({ isAboveThreshold: result });

@@ -1,11 +1,8 @@
-console.log("RUnnnn....")
 const browserAPI_notoxicity = typeof browser !== "undefined" ? browser : chrome;
 
 async function sendAnalyzeTextRequest(sentence, keywords) {
     try {
-        console.log("Envoi...", sentence, keywords);
         const response = await browserAPI_notoxicity.runtime.sendMessage({ type: 'analyzeText', sentence: sentence, keywords: keywords, threshold: 0.41 });
-        console.log("Réponse reçue :", response);
 
         if (response && typeof response.isAboveThreshold === 'boolean') {
             return response.isAboveThreshold;
@@ -29,7 +26,7 @@ async function sendAnalyzeTextRequest(sentence, keywords) {
     const autoMode = optionsStorage.autoMode;
 
     if (keywords.length === 0) {
-        console.log("Aucun mot-clé n'a été défini. Veuillez ajouter des mots-clés dans les options.");
+        console.error("Aucun mot-clé n'a été défini. Veuillez ajouter des mots-clés dans les options.");
         return;
     }
 
