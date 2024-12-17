@@ -39,7 +39,7 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_st
 # Création du modèle
 model = Sequential([
     Embedding(max_words, 128, input_length=max_len),
-    LSTM(64, return_sequences=True),
+    LSTM(128, return_sequences=True),
     GlobalMaxPool1D(),
     Dropout(0.5),
     Dense(64, activation='relu' ),
