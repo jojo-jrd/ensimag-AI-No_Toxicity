@@ -97,6 +97,30 @@ async function analyzeText(sentence, keywords, threshold = 0.7) {
 
 loadModel(); // On charge le modèle dès le début
 
+const BASE_URL = "https://juliangmz.pythonanywhere.com";
+
+// Fonction pour analyser un texte via l'API Flask
+async function sendAIAnalyzeRequest(sentences) {
+    try {
+        const response = await fetch(`${BASE_URL}/predict`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ comments: sentences }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            return result; // Retourne les prédictions
+        } else {
+            console.error(`Erreur lors de la requête Flask: ${response.statusText}`);
+            return null;
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'envoi de la requête Flask:", error);
+        return null;
+    }
+}
+
 function handleMessage(message, sender, sendResponse) {
     if (message.type === 'analyzeText' && message.sentence && Array.isArray(message.keywords)) {        
         analyzeText(message.sentence, message.keywords, message.threshold)
@@ -108,6 +132,17 @@ function handleMessage(message, sender, sendResponse) {
                 sendResponse({ isAboveThreshold: false });
             });
         return true; // Indique une réponse asynchrone à l’API
+    } else if (message.type === 'analyzeSentences') {
+        // Gestion de la requête pour plusieurs phrases
+        sendAIAnalyzeRequest(message.sentences)
+            .then((result) => {
+                sendResponse({ results: result });
+            })
+            .catch((error) => {
+                console.error(error);
+                sendResponse({ results: null });
+            });
+        return true; // Réponse asynchrone
     }
 }
 browserAPI_serviceworker.runtime.onMessage.addListener(handleMessage);

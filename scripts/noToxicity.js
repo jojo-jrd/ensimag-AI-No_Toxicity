@@ -1,46 +1,20 @@
 const browserAPI_notoxicity = typeof browser !== "undefined" ? browser : chrome;
 
-async function sendAnalyzeTextRequest(sentence, keywords) {
+async function sendAnalyzeIATextRequest(sentences) {
     try {
         const response = await browserAPI_notoxicity.runtime.sendMessage({
-            type: 'analyzeText',
-            sentence: sentence,
-            keywords: keywords,
-            threshold: 0.41
+            type: 'analyzeSentences',
+            sentences: sentences,
         });
 
-        if (response && typeof response.isAboveThreshold === 'boolean') {
-            return response.isAboveThreshold;
+        if (response && response.results) {
+            return response.results; // Retourne les résultats de l'API
         } else {
             console.error("Aucune réponse valide reçue. " + response);
-            return false;
-        }
-    } catch (error) {
-        console.error("Erreur lors de l'envoi du message :", error);
-        return false;
-    }
-}
-
-const BASE_URL = "https://juliangmz.pythonanywhere.com";
-
-async function sendAIAnalyzeRequest(sentences) {
-    try {
-        const response = await fetch(`${BASE_URL}/predict`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ comments: sentences })
-        });
-
-        if (response.ok) {
-            console.log(response)
-            const result = await response.json();
-            return result; // Retourne les prédictions
-        } else {
-            console.error(`Erreur lors de la requête flask: ${response.statusText}`);
             return null;
         }
     } catch (error) {
-        console.error("Erreur lors de l'envoi de la requête flask:", error);
+        console.error("Erreur lors de l'envoi du message :", error);
         return null;
     }
 }
@@ -170,8 +144,7 @@ function hideBlock(block) {
             Promise.all(waitPromises).then(async () => {
                 // Get the answer for all sentences
                 // TODO probleme
-                const iaSentenceResults = await sendAIAnalyzeRequest(sentencesToAnalyze);
-                console.log(iaSentenceResults);
+                const iaSentenceResults = await sendAnalyzeIATextRequest(sentencesToAnalyze);
                 if (iaSentenceResults) {
                     iaSentenceResults.forEach((result, index) => {
                         if (result?.is_toxic) {
