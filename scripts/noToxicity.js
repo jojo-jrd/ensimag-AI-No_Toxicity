@@ -42,6 +42,14 @@ async function sendAnalyzeTextRequest(sentence, keywords) {
 
 // Fonction pour masquer un bloc
 function hideBlock(block) {
+    // Vérifie si le bloc a déjà été masqué
+    if (block.classList.contains('processed-no-toxicity')) {
+        return; // Ne masque pas à nouveau
+    }
+
+    // Marque le bloc comme traité
+    block.classList.add('processed-no-toxicity');
+
     // Créer un conteneur pour envelopper le bloc de texte
     const container = document.createElement('div');
     container.classList.add('hidden-block-no-toxicity');
@@ -77,6 +85,7 @@ function hideBlock(block) {
     container.appendChild(overlay); // Place la superposition au-dessus
 }
 
+
 (async function() {
     // Récupère les options de stockage (keywords, autoMode)
     const optionsStorage = await browserAPI_notoxicity.storage.local.get(['keywords', 'autoMode']);
@@ -109,6 +118,7 @@ function hideBlock(block) {
             continue;
         }
 
+        console.log("Traitement du bloc de texte:", block);
         const textContent = block.innerText;
         if (textContent) {
             const sentence = textContent.toLowerCase()
@@ -140,26 +150,26 @@ function hideBlock(block) {
                 }));
             }
         }
-        if (autoMode && sentencesToAnalyze.length > 0) {
-            Promise.all(waitPromises).then(async () => {
-                // Get the answer for all sentences
-                // TODO probleme
-                const iaSentenceResults = await sendAnalyzeIATextRequest(sentencesToAnalyze);
-                if (iaSentenceResults) {
-                    iaSentenceResults.forEach((result, index) => {
-                        if (result?.is_toxic) {
-                            const block = blockMap[index];
-                            if (block && !processedElements.has(block)) {
-                                processedElements.add(block);
-                                hideBlock(block);
-                            }
+    }
+    if (autoMode && sentencesToAnalyze.length > 0) {
+        Promise.all(waitPromises).then(async () => {
+            // Get the answer for all sentences
+            const iaSentenceResults = await sendAnalyzeIATextRequest(sentencesToAnalyze);
+            console.log(iaSentenceResults);
+            if (iaSentenceResults) {
+                iaSentenceResults.forEach((result, index) => {
+                    if (result?.is_toxic) {
+                        const block = blockMap[index];
+                        if (block && !processedElements.has(block)) {
+                            processedElements.add(block);
+                            hideBlock(block);
                         }
-                    });
-                }
-                waitPromises = [];
-                sentencesToAnalyze = [];
-                blockMap = [];
-            });
-        }
+                    }
+                });
+            }
+            waitPromises = [];
+            sentencesToAnalyze = [];
+            blockMap = [];
+        });
     }
 })();
