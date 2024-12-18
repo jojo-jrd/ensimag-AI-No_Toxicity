@@ -118,7 +118,6 @@ function hideBlock(block) {
             continue;
         }
 
-        console.log("Traitement du bloc de texte:", block);
         const textContent = block.innerText;
         if (textContent) {
             const sentence = textContent.toLowerCase()
@@ -155,7 +154,6 @@ function hideBlock(block) {
         Promise.all(waitPromises).then(async () => {
             // Get the answer for all sentences
             const iaSentenceResults = await sendAnalyzeIATextRequest(sentencesToAnalyze);
-            console.log(iaSentenceResults);
             if (iaSentenceResults) {
                 iaSentenceResults.forEach((result, index) => {
                     if (result?.is_toxic) {

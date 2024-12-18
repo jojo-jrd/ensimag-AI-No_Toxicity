@@ -7,7 +7,7 @@
 }
 
 .hidden-overlay-no-toxicity {
-  background: rgba(255, 255, 255, 0.9); /* Couche semi-transparente blanche */
+  background: rgba(255, 255, 255, 0.99); /* Couche semi-transparente blanche */
   position: absolute;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 0.9;
+  opacity: 0.97;
   border-radius: 6px;
   transition: opacity 0.3s ease-in-out; /* Transition pour un effet fluide */
 }
