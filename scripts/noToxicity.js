@@ -100,74 +100,88 @@ function hideBlock(block) {
         return;
     }
 
-    // Sélectionne des éléments parents logiques pour regrouper le texte
-    const textBlocks = document.querySelectorAll('h1,h2,h3,h4,h5,h6,pre,p,span,a,strong,li');
-
-    // Utiliser un Set pour éviter de traiter plusieurs fois le même élément
     const processedElements = new Set();
-    sentencesToAnalyze = [];
-    blockMap = [];
-    
-    waitPromises = [];
+    const selectors = "h1,h2,h3,h4,h5,h6,pre,p,span,a,strong,li";
 
-    // Parcours chaque bloc de texte
-    for (const block of textBlocks) {
+    function analyzeBlocks(blocks) {
+        const sentencesToAnalyze = [];
+        const blockMap = [];
+        const waitPromises = [];
 
-        // Évite de traiter les éléments déjà traités ou les éléments imbriqués
-        if (processedElements.has(block) || [...processedElements].some(el => el.contains(block))) {
-            continue;
-        }
-
-        const textContent = block.innerText;
-        if (textContent) {
-            const sentence = textContent.toLowerCase()
-            .replace(/[^a-zA-Z0-9\s]/g, '')
-            .replace(/\s+/g, ' ')
-            .trim();
-
-            if (sentence.split(' ').length < 3) {
-                continue; // Ignore les phrases trop courtes
+        for (const block of blocks) {
+            if (processedElements.has(block)) {
+                continue;
             }
 
-            if (autoMode) {
-                sentencesToAnalyze.push(sentence);
-                blockMap.push(block); // Associe le bloc à la phrase
-            }
+            const textContent = block.innerText;
+            if (textContent) {
+                const sentence = textContent.toLowerCase()
+                    .replace(/[^a-zA-Z0-9\s]/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
 
-            if (keywords.length) {
-                waitPromises.push(sendAnalyzeTextRequest(sentence, keywords).then(isToxic =>{
-                    // Si un contenu toxique est détecté, masque le bloc de texte
-                    if (isToxic) {
-                        // Marque cet élément comme traité
-                        processedElements.add(block);
-                        hideBlock(block);
-                    }
-                    return  Promise.resolve();
-                }).catch(err => {
-                    console.error("Erreur lors de l'analyse du texte:", err);
-                    return Promise.resolve();
-                }));
-            }
-        }
-    }
-    if (autoMode && sentencesToAnalyze.length > 0) {
-        Promise.all(waitPromises).then(async () => {
-            // Get the answer for all sentences
-            const iaSentenceResults = await sendAnalyzeIATextRequest(sentencesToAnalyze);
-            if (iaSentenceResults) {
-                iaSentenceResults.forEach((result, index) => {
-                    if (result?.is_toxic) {
-                        const block = blockMap[index];
-                        if (block && !processedElements.has(block)) {
+                if (sentence.split(' ').length < 3) {
+                    continue;
+                }
+
+                if (autoMode) {
+                    sentencesToAnalyze.push(sentence);
+                    blockMap.push(block);
+                }
+
+                if (keywords.length) {
+                    waitPromises.push(sendAnalyzeTextRequest(sentence, keywords).then(isToxic => {
+                        if (isToxic) {
                             processedElements.add(block);
                             hideBlock(block);
                         }
+                    }).catch(err => {
+                        console.error("Erreur lors de l'analyse du texte:", err);
+                    }));
+                }
+            }
+        }
+
+        if (autoMode && sentencesToAnalyze.length > 0) {
+            Promise.all(waitPromises).then(async () => {
+                const iaSentenceResults = await sendAnalyzeIATextRequest(sentencesToAnalyze);
+                if (iaSentenceResults) {
+                    iaSentenceResults.forEach((result, index) => {
+                        if (result?.is_toxic) {
+                            const block = blockMap[index];
+                            if (block && !processedElements.has(block)) {
+                                processedElements.add(block);
+                                hideBlock(block);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function observeDOM() {
+        const observer = new MutationObserver((mutationsList) => {
+            const newBlocks = [];
+            mutationsList.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        const blocks = node.querySelectorAll(selectors);
+                        newBlocks.push(...blocks);
                     }
                 });
-            }
-            waitPromises = [];
-            sentencesToAnalyze = [];
-            blockMap = [];
+            });
+
+            analyzeBlocks(newBlocks);
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
         });
     }
+
+    const initialBlocks = document.querySelectorAll(selectors);
+    analyzeBlocks(initialBlocks);
+    observeDOM();
 })();
